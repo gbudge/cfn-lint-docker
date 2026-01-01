@@ -5,6 +5,7 @@ A small Python wrapper that runs [`cfn-lint`][cfn-lint] inside [Docker][docker] 
 ## Why this exists
 
 - Avoids installing Python dependencies and [`cfn-lint`][cfn-lint] locally.
+- Consistent local and CI experience.
 - Keeps behavior close to the real [`cfn-lint`][cfn-lint] CLI.
 - Works on Linux, macOS, and Windows with path normalization.
 
