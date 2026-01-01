@@ -1,0 +1,5 @@
+# these are only required for testing changes to
+# this script and are not required for daily use.
+
+pytest
+pytest-cov

@@ -1,0 +1,19 @@
+#
+# For those that prefer to use wolfi, here is a Dockerfile for cfn-lint
+#
+ARG BASE_IMAGE_REPO=cgr.dev/chainguard/wolfi-base
+ARG BASE_IMAGE_TAG=latest
+ARG BASE_IMAGE_DIGEST=sha256:0d8efc73b806c780206b69d62e1b8cb10e9e2eefa0e4452db81b9fa00b1a5175
+
+FROM ${BASE_IMAGE_REPO}:${BASE_IMAGE_TAG}@${BASE_IMAGE_DIGEST}
+
+ARG PYTHON_VERSION=3.13
+RUN apk add python-${PYTHON_VERSION} py3-pip
+
+USER nonroot
+
+RUN pip install cfn-lint[full]
+RUN pip install pydot
+
+ENTRYPOINT ["cfn-lint"]
+CMD ["--help"]

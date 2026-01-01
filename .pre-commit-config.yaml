@@ -1,0 +1,69 @@
+# .pre-commit-config.yaml
+# Runs automatic formatting and linting before each commit.
+# Scope is limited to:
+#   - Python code in /src
+
+repos:
+
+  # ------------------------------------------------------------------
+  # Generic sanity checks (all files)
+  # ------------------------------------------------------------------
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: check-added-large-files              # Prevents committing large files (default=500kB)
+      - id: check-case-conflict                  # Detects files with case conflicts
+      - id: check-executables-have-shebangs      # Ensures executable files have shebangs
+      - id: check-json
+        exclude: test/fixtures/.*\.json$  # Exclude test fixture JSON files
+      - id: check-shebang-scripts-are-executable # Ensures scripts with shebangs are executable
+      - id: check-toml                           # Validates TOML syntax
+      - id: check-xml                            # Validates XML syntax
+      - id: check-yaml                           # Validates YAML syntax
+        exclude: test/fixtures/.*\.(yml|yaml)$  # Exclude test fixture YAML files
+      - id: detect-private-key                   # Prevents committing private keys
+      - id: end-of-file-fixer                    # Ensures files end with a single newline
+      - id: mixed-line-ending                    # Ensures consistent line endings
+      - id: name-tests-test                      # Ensures test files are named correctly
+      - id: pretty-format-json                   # Formats JSON files to be pretty-printed
+        exclude: test/fixtures/.*\.json$  # Exclude test fixture JSON files
+        args: ['--autofix']
+      - id: requirements-txt-fixer               # Fixes common issues in requirements.txt files
+      - id: trailing-whitespace                  # Removes trailing whitespace from all files
+
+  # ------------------------------------------------------------------
+  # Python formatting and linting
+  # ------------------------------------------------------------------
+
+  # Black: opinionated Python code formatter (AUTO-FIXES)
+  - repo: https://github.com/psf/black
+    rev: 24.10.0
+    hooks:
+      - id: black
+        name: black (python formatter)
+        language_version: python3
+        files: ^src/
+        types: [python]
+        # Uses pyproject.toml if present
+        args: []
+
+  # isort: sorts Python imports (AUTO-FIXES)
+  - repo: https://github.com/PyCQA/isort
+    rev: 5.12.0
+    hooks:
+      - id: isort
+        name: isort (import ordering)
+        files: ^src/
+        types: [python]
+        # Matches Black's import style
+        args: ["--profile=black"]
+
+  # flake8: Python linting (NO autofix, diagnostics only)
+  - repo: https://github.com/PyCQA/flake8
+    rev: 6.1.0
+    hooks:
+      - id: flake8
+        name: flake8 (python linter)
+        files: ^src/
+        types: [python]
+        args: ["--max-line-length=120"]

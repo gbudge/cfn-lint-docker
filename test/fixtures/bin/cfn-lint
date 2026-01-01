@@ -1,0 +1,40 @@
+#!/usr/bin/env python3
+import json
+import os
+import sys
+from pathlib import Path
+
+def main():
+    args = sys.argv[1:]
+    if '--' not in args:
+        print('[]')
+        return 0
+    file_path = args[args.index('--') + 1]
+    name = Path(file_path).name
+
+    try:
+        with open(file_path, 'r') as f:
+            content = f.read()
+    except Exception:
+        content = ""
+
+    if 'AWS::EC2::Instance1' in content or name == 'bad.yaml':
+        output = [
+            {
+                "Filename": file_path,
+                "Level": "Error",
+                "Location": {
+                    "Start": {"LineNumber": 5, "ColumnNumber": 1},
+                    "End": {"LineNumber": 5, "ColumnNumber": 12}
+                },
+                "Message": "Invalid template",
+                "Rule": {"Id": "E0001", "ShortDescription": "Invalid template"}
+            }
+        ]
+        print(json.dumps(output))
+        return 2
+    print('[]')
+    return 0
+
+if __name__ == '__main__':
+    sys.exit(main())
